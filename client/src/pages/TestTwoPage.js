@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { MyButton } from "../components/MyButton.js"
+import { MyButton } from "../components/UI/MyButton.js"
 import { useHttp } from "../hooks/http.hook.js"
 
 export const TestTwoPage = () => {

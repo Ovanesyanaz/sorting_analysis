@@ -1,12 +1,11 @@
 import React from "react"
 import { MainPage } from "./pages/MainPage"
 import { TestTwoPage } from "./pages/TestTwoPage"
-
 function App() {
     
     return (
         <div>
-            <TestTwoPage/>
+            <MainPage/>
         </div>
     )
 }

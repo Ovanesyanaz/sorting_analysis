@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { MyButton } from "../components/MyButton.js"
-import { MyTextField} from "../components/MyTextField.js"
+import { MyButton } from "../components/UI/MyButton.js"
+import { MyTextField} from "../components/UI/MyTextField.js"
 import { useHttp } from "../hooks/http.hook.js"
 
 export const TestPage = () => {

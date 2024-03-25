@@ -4,6 +4,6 @@ import Typography from '@mui/material/Typography';
 
 export const MyTypography = (props) => {
   return (
-      <Typography variant={props.h} gutterBottom/>
+    <Typography variant={props.h} gutterBottom>{props.state}</Typography>
   );
 }
