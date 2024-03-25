@@ -6,19 +6,11 @@ import time
 app = Flask(__name__)
 
 
-# @app.route('/test', methods=["POST"])
-# def test():
-#     data = request.get_json()
-#     print(data)
-#     return {"answ" : str((int(data[0]) + int(data[1])))}
-
-
 @app.route('/test', methods=["POST"])
 def test():
     data = request.get_json()
     print(data)
     return data
-
 
 
 @app.route('/get_image', methods = ["POST"])
