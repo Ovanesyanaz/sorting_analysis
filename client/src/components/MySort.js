@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState} from "react"
 import { MyTypography } from "./UI/MyTypography"
 
 export const MySort = (props) => {
@@ -19,9 +19,9 @@ export const MySort = (props) => {
 	}
 
     return (
-        <li>
+        <li style={{display:"flex"}}>
             <MyTypography state = {props.state}/>
-		    <input type="checkbox" name={props.name} checked={checked} onChange={handleChange} />
+		    <input style={{margin:"1%"}} type="checkbox" name={props.name} checked={checked} onChange={handleChange} />
         </li>
     )
 }
