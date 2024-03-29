@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState} from "react";
 import { MyButton } from "../components/UI/MyButton.js"
 import { useHttp } from "../hooks/http.hook.js"
 import { useLocalStorage } from "../hooks/useLocalStorage.hook.js";
@@ -6,9 +6,7 @@ import { MySortsList } from "../components/MySortsList.js";
 import { MyDataSelection } from "../components/MyDataSelection.js";
 
 export const MainPage = () => {
-    const sorts = ["пузырик", "богосорт", "лайнсорт"]
     const [imgString, setImgString] = useState([],"")
-    const [infoAboutSorts, setInfoAboutSorts] = useState([], [])
     const {loading, request} = useHttp()
     const [disBtn, setDisBtn] = useState([], {"value" : false})
     const [sortsState, setSortsState] = useState([], ["пузырик", "богосорт", "лайнсорт"])
@@ -16,15 +14,7 @@ export const MainPage = () => {
     const [inputDataType, setInputDataType] = useState([], '')
     const [inputDataSize, setInputDataSize] = useState([], '')
     const dataType = ["default data","bad data for quicksort", "bad data for mergesort"]
-    // const ClickButton = async() => {
-    //     setDisBtn({"value" : true})
-    //     const data = await request("/test", "POST", sortsState)
-    //     console.log(data)
-    //     setValue([...data])
-    //     setSortsState([...data])
-    //     setDisBtn({"value" : false})
-    // }
-    const ClickButton = async() => {
+    const ClickButton  = async() => {
         setDisBtn({"value" : true})
         const data = await request(`/server/get_info_about_sorts/${inputDataType}/${inputDataSize}`, "POST")
         setValue([...data.info_about_sorts])
@@ -33,12 +23,21 @@ export const MainPage = () => {
         setDisBtn({"value" : false})
     }
 
+    const ClickCheckBox = async() => {
+        setImgString("")
+        const data = await request('/server/chart_update', "POST", value)
+        setImgString(data.img_in_bytes)
+    }
+
     useEffect(()=>{
         setInputDataSize("1000")
+        console.log("hello from useEffect")
         setInputDataType(dataType[0])
-    },[])
+    }, [])
+
 
     return (
+        <>
         <div style={{display:"flex", justifyContent:"center"}}>  
             <div style={{display:"inline-block", width:"45%", margin:"2%", paddingTop:"1%"}}>
                 <MyDataSelection 
@@ -48,6 +47,7 @@ export const MainPage = () => {
                     Item={dataType} 
                     setInputDataType={setInputDataType} 
                     setInputDataSize={setInputDataSize}
+                    maxValue = {1000000}
                 />
 
                 <MyButton 
@@ -59,18 +59,17 @@ export const MainPage = () => {
                 {(imgString.length === 0) ? (
                     <p></p>
                 ) : (
-                    <MySortsList
-                        setSortsState = {setSortsState} 
-                        sortsState = {sortsState}
-                    />
+                    <>
+                        <MySortsList
+                            ClickCheckBox = {ClickCheckBox}
+                            setSortsState = {setSortsState} 
+                            sortsState = {sortsState}
+                        />
+                    </>
+                    
                 )}
             </div>
 
-                {(loading) ? (
-                    <p>loading...</p>
-                ) : (
-                    <p></p>
-                )}
                 {(imgString.length === 0) ? (
                     <p></p>
                 ) : (
@@ -81,8 +80,23 @@ export const MainPage = () => {
 
 
         </div>
+            {(loading) ? (
+                <p style={{display:"flex", justifyContent:"center"}}>loading...</p>
+            ) : (
+                <p></p>
+            )}
+        </>
     )
 }
+
+// const ClickButton = async() => {
+//     setDisBtn({"value" : true})
+//     const data = await request("/test", "POST", sortsState)
+//     console.log(data)
+//     setValue([...data])
+//     setSortsState([...data])
+//     setDisBtn({"value" : false})
+// }
 
 {/* <MySortsList sortsState={sortsState} setSortsState={setSortsState}/>
 <MyButton disabled = {disBtn.value} onclk = {ClickButton}/> */}

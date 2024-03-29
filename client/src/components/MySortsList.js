@@ -6,6 +6,7 @@ export const MySortsList = (props) => {
         <menu style={{padding:"0", listStyle:"none"}}>
             {sorts.map((sort) =>
                 <MySort 
+                    ClickCheckBox = {props.ClickCheckBox}
                     key={sort.toString()} 
                     state={sort} 
                     name={sort} 

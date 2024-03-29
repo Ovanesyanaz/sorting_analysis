@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState} from 'react'
 import Box from '@mui/material/Box'
 import InputLabel from '@mui/material/InputLabel'
 import MenuItem from '@mui/material/MenuItem'
@@ -8,7 +8,6 @@ import Select from '@mui/material/Select'
 export const MyAutoComplete = (props) => {
     const [value, setValue] = useState([], props.item[0])
     const handleChange = (event) => {
-        console.log(props.item)
         setValue(event.target.value)
         props.setInputData(event.target.value)
     };
@@ -18,6 +17,7 @@ export const MyAutoComplete = (props) => {
             <FormControl fullWidth>
             <InputLabel id="demo-simple-select-label">{props.InputLabel}</InputLabel>
             <Select
+                defaultValue="default"
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
                 value={value}
