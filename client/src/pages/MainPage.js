@@ -38,6 +38,17 @@ export const MainPage = () => {
 
     return (
         <>
+        {(loading) ? (
+            <div style={{display:"flex", justifyContent:"center"}}>
+                <img 
+                    src={`${process.env.PUBLIC_URL}/loading_ytka.gif`}
+                    style={{maxWidth: "33%"}}
+                    >
+                </img>
+            </div>
+        ) : (
+            <p></p>
+        )}
         <div style={{display:"flex", justifyContent:"center"}}>  
             <div style={{display:"inline-block", width:"45%", margin:"2%", paddingTop:"1%"}}>
                 <MyDataSelection 
@@ -80,11 +91,6 @@ export const MainPage = () => {
 
 
         </div>
-            {(loading) ? (
-                <p style={{display:"flex", justifyContent:"center"}}>loading...</p>
-            ) : (
-                <p></p>
-            )}
         </>
     )
 }

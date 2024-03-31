@@ -19,6 +19,7 @@ def index():
     return app.send_static_file('index.html')
 
 def generate_first_graphs(data):
+    time.sleep(1)
     fig = Figure()
     ax = fig.subplots()
     for i in range(len(data)):
