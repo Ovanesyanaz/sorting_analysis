@@ -1,13 +1,15 @@
 import ctypes
 import random
+import os
 
 
 if __name__ == "__main__":
     try:
-        lib = ctypes.cdll.LoadLibrary("build/libsorts.so")
+        dir_path = os.path.dirname(os.path.realpath(__file__))
+        lib = ctypes.cdll.LoadLibrary(dir_path + "/build/libsorts.so")
         lib.bubble_sort_with_timer.restype = ctypes.c_double
         lib.insertion_sort_with_timer.restype = ctypes.c_double
-        py_values = [random.randint(1, 1000) for _ in range(1_000_000)]
+        py_values = [random.randint(1, 1000) for _ in range(10_000)]
 
         arr_1 = (ctypes.c_int * len(py_values))(*py_values)
         arr_2 = (ctypes.c_int * len(py_values))(*py_values)
