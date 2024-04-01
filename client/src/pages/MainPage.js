@@ -9,7 +9,7 @@ export const MainPage = () => {
     const [imgString, setImgString] = useState([],"")
     const {loading, request} = useHttp()
     const [disBtn, setDisBtn] = useState([], {"value" : false})
-    const [sortsState, setSortsState] = useState([], ["пузырик", "богосорт", "лайнсорт"])
+    const [sortsState, setSortsState] = useState([], ["quicksort", "booblesort", "insertsort", "selectsort"])
     const [value, setValue] = useLocalStorage([], "sorts_data")
     const [inputDataType, setInputDataType] = useState([], '')
     const [inputDataSize, setInputDataSize] = useState([], '')
@@ -30,6 +30,7 @@ export const MainPage = () => {
     }
 
     useEffect(()=>{
+        setSortsState(["quicksort", "booblesort", "insertsort", "selectsort"])
         setInputDataSize("1000")
         console.log("hello from useEffect")
         setInputDataType(dataType[0])
