@@ -24,13 +24,16 @@ export const MainPage = () => {
     //     setDisBtn({"value" : false})
     // }
 
+    useEffect(() => {
+        console.log(value, "from useEffect")
+    }, [value])
+
     const ClickButton = async() => {
         setDisBtn({"value" : true})
         setValue([])
         for (const sort of sortsState){
             const data = await request(`/server/get_new_graphs/${sort}/${inputDataSize}`, "POST", {value})
-            console.log(data)
-            setValue(data.info_about_sort)
+            setValue(data.info_about_sort.value)
             setImgString(data.img)
         }
         setDisBtn({"value" : false})

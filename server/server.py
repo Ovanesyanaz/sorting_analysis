@@ -32,12 +32,16 @@ def get_new_graphs(old_graphs, new_sort_name, data_size):
     fig = Figure()
     ax = fig.subplots()
     for i in range(len(old_graphs["value"])):
-        ax.plot(old_graphs.value[i])
+        print("old_graphs['value'][i]", old_graphs["value"][i])
+        ax.plot(old_graphs["value"][i])
+
+
     dir_path = os.path.dirname(os.path.realpath(__file__))
     lib = ctypes.cdll.LoadLibrary(dir_path + "/libc/build/libsorts.dylib")
     lib.bubble_sort_with_timer.restype = ctypes.c_double
     lib.insertion_sort_with_timer.restype = ctypes.c_double
     info_about_new_sort = []
+
     if (new_sort_name == "insertion_sort"):
         for i in range(10, data_size, int((data_size - 10) / 200)):
             py_values = [random.randint(1, 1000) for _ in range(i)]
@@ -45,15 +49,17 @@ def get_new_graphs(old_graphs, new_sort_name, data_size):
             info_about_new_sort.append(lib.insertion_sort_with_timer(arr_1, len(arr_1)))
         dict = {"insertion_sort" : info_about_new_sort}
         old_graphs["value"].append(dict)
-        print(old_graphs)
+
     if (new_sort_name == "bubble_sort"):
         for i in range(10, data_size, int((data_size - 10) / 200)):
             py_values = [random.randint(1, 1000) for _ in range(i)]
             arr_1 = (ctypes.c_int * len(py_values))(*py_values)
             info_about_new_sort.append(lib.bubble_sort_with_timer(arr_1, len(arr_1)))
+
     ax.plot(range(10, data_size, int((data_size - 10) / 200)), info_about_new_sort)
     buf = BytesIO()
     fig.savefig(buf, format="png")
+
     return {"img":base64.b64encode(buf.getbuffer()).decode("ascii"), "info_about_sort": old_graphs}
 
 def generate_first_graphs(data):
@@ -73,7 +79,7 @@ def index():
 @app.route('/server/get_new_graphs/<new_sort_name>/<data_size>', methods=["POST"])
 def generate_new_graphs(new_sort_name, data_size):
     old_graphs = request.get_json()
-    print(old_graphs)
+    print("old_graphs ",old_graphs)
     return get_new_graphs(old_graphs, new_sort_name, int(data_size))
 
 @app.route('/server/get_info_about_sorts/<data_type>/<data_size>', methods=["POST"])
