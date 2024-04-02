@@ -6,6 +6,7 @@ import { MySortsList } from "../components/MySortsList.js";
 import { MyDataSelection } from "../components/MyDataSelection.js";
 
 export const MainPage = () => {
+    const [iter, setIter] = useState([], 0)
     const [imgString, setImgString] = useState([],"")
     const {loading, request} = useHttp()
     const [disBtn, setDisBtn] = useState([], {"value" : false})
@@ -14,12 +15,24 @@ export const MainPage = () => {
     const [inputDataType, setInputDataType] = useState([], '')
     const [inputDataSize, setInputDataSize] = useState([], '')
     const dataType = ["default data","bad data for quicksort", "bad data for mergesort"]
-    const ClickButton  = async() => {
+    // const ClickButton  = async() => {
+    //     setDisBtn({"value" : true})
+    //     const data = await request(`/server/get_info_about_sorts/${inputDataType}/${inputDataSize}`, "POST")
+    //     setValue([...data.info_about_sorts])
+    //     setImgString(data.img_in_bytes)
+    //     console.log(data)
+    //     setDisBtn({"value" : false})
+    // }
+
+    const ClickButton = async() => {
         setDisBtn({"value" : true})
-        const data = await request(`/server/get_info_about_sorts/${inputDataType}/${inputDataSize}`, "POST")
-        setValue([...data.info_about_sorts])
-        setImgString(data.img_in_bytes)
-        console.log(data)
+        setValue([])
+        for (const sort of sortsState){
+            const data = await request(`/server/get_new_graphs/${sort}/${inputDataSize}`, "POST", {value})
+            console.log(data)
+            setValue(data.info_about_sort)
+            setImgString(data.img)
+        }
         setDisBtn({"value" : false})
     }
 
@@ -30,12 +43,12 @@ export const MainPage = () => {
     }
 
     useEffect(()=>{
-        setSortsState(["quicksort", "booblesort", "insertsort", "selectsort"])
+        //setSortsState(["quicksort", "booblesort", "insertsort", "selectsort"])
+        setSortsState(["insertion_sort", "bubble_sort"])
         setInputDataSize("1000")
         console.log("hello from useEffect")
         setInputDataType(dataType[0])
     }, [])
-
 
     return (
         <>

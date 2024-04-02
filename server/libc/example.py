@@ -1,12 +1,13 @@
 import ctypes
 import random
 import os
+import platform
 
 
 if __name__ == "__main__":
     try:
         dir_path = os.path.dirname(os.path.realpath(__file__))
-        lib = ctypes.cdll.LoadLibrary(dir_path + "/build/libsorts.so")
+        lib = ctypes.cdll.LoadLibrary(dir_path + "/build/libsorts.dylib")
         lib.bubble_sort_with_timer.restype = ctypes.c_double
         lib.insertion_sort_with_timer.restype = ctypes.c_double
         py_values = [random.randint(1, 1000) for _ in range(10_000)]

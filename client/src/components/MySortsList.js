@@ -1,7 +1,6 @@
 import React from "react"
 import { MySort } from "./MySort"
 export const MySortsList = (props) => {
-    console.log(props.sortsState, "props.sortsState")
     const sorts = props.sortsState
     return (
         <menu style={{padding:"0", listStyle:"none"}}>
