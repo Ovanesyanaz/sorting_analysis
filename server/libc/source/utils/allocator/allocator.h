@@ -7,6 +7,6 @@
 #define BAD_ALLOC_MESSAGE "Memory was not allocated\n"
 
 void *allocate(size_t size);
-void deallocate(void* p) { free(p); }
+void deallocate(void* p);
 
 #endif // __ALLOCATOR_H__

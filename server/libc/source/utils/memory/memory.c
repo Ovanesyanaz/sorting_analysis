@@ -6,7 +6,7 @@
 #include <string.h>
 #include "utils/error/error.h"
 
-void copy(void* p, size_t dest_size,
+void copy(void* d, size_t dest_size,
           const void* s, size_t source_size)
 {
     if (dest_size != source_size) {
@@ -14,5 +14,5 @@ void copy(void* p, size_t dest_size,
         exit(2);
     }
 
-    memcpy(p, s, source_size);
+    memcpy(d, s, source_size);
 }

@@ -14,3 +14,5 @@ void *allocate(size_t size)
 
     return p;
 }
+
+void deallocate(void* p) { free(p); }

@@ -1,7 +1,8 @@
 #include "swap.h"
 
 #include "stdlib.h"
-#include "memory.h"
+#include "utils/allocator/allocator.h"
+#include "utils/memory/memory.h"
 
 void swap_three(void *a, void *b, void *tmp, int size_t);
 void swap_alloca(void *a, void *b, int size_t);
@@ -25,13 +26,13 @@ void swap_alloca(void *a, void *b, int size_t)
 
 void swap_malloc(void *a, void *b, int size_t)
 {
-    void *tmp = malloc(size_t);
+    void *tmp = allocate(size_t);
     swap_three(a, b, tmp, size_t);
 }
 
 void swap_three(void *a, void *b, void *tmp, int size_t)
 {
-    memcpy(tmp, a, size_t);
-    memcpy(a, b, size_t);
-    memcpy(b, tmp, size_t);
+    copy(tmp, size_t, a, size_t);
+    copy(a, size_t, b, size_t);
+    copy(b, size_t, tmp, size_t);
 }
