@@ -25,9 +25,9 @@ if __name__ == "__main__":
         dir_path = os.path.dirname(os.path.realpath(__file__))
         lib_path = ""
         match platform.system():
-            case "Linux": lib_path = "/build/libsort.so"
-            case "Darwin": lib_path = "/build/libsort.dylib"
-            case "Windows": lib_path = "\\build\\libsort.dll"
+            case "Linux": lib_path = "/build/libsorts.so"
+            case "Darwin": lib_path = "/build/libsorts.dylib"
+            case "Windows": lib_path = "\\build\\libsorts.dll"
             case _: raise RuntimeError("undefined platform")
         
         lib = ctypes.cdll.LoadLibrary(dir_path + lib_path)
