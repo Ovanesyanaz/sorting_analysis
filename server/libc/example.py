@@ -1,6 +1,7 @@
 import ctypes
 import random
 import os
+import platform
 
 from typing import Callable
 
@@ -22,8 +23,14 @@ def test_sort(sort: Callable, data: list[int], name: str) -> None:
 if __name__ == "__main__":
     try:
         dir_path = os.path.dirname(os.path.realpath(__file__))
-        lib = ctypes.cdll.LoadLibrary(dir_path + "/build/libsorts.so")
-
+        lib_path = ""
+        match platform.system():
+            case "Linux": lib_path = "/build/libsort.so"
+            case "Darwin": lib_path = "/build/libsort.dylib"
+            case "Windows": lib_path = "\\build\\libsort.dll"
+            case _: raise RuntimeError("undefined platform")
+        
+        lib = ctypes.cdll.LoadLibrary(dir_path + lib_path)
         lib.bubble_sort_with_timer.restype = ctypes.c_double
         lib.insertion_sort_with_timer.restype = ctypes.c_double
         lib.selection_sort_with_timer.restype = ctypes.c_double
@@ -40,4 +47,3 @@ if __name__ == "__main__":
 
     except Exception as ex:
         print(ex)
-
