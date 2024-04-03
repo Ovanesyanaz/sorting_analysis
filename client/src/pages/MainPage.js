@@ -15,10 +15,11 @@ export const MainPage = () => {
     const [inputDataType, setInputDataType] = useState([], '')
     const [inputDataSize, setInputDataSize] = useState([], '')
     const dataType = ["default data","bad data for quicksort", "bad data for mergesort"]
-    
+
     useEffect(()=>{
         //setSortsState(["quicksort", "booblesort", "insertsort", "selectsort"])
         setSortsState(["quick_sort", "merge_sort", "insertion_sort", "bubble_sort"])
+        setCheckBoxState(["quick_sort", "merge_sort", "insertion_sort", "bubble_sort"])
         setInputDataSize("1000")
         setValue({})
         setIterforbutton("")
@@ -26,6 +27,18 @@ export const MainPage = () => {
         setInputDataType(dataType[0])
     }, [])
 
+    const get_old_graphs = async() => {
+        let b = new Set(checkBoxState)
+        let a = [...new Set(sortsState.filter(x => b.has(x)))]
+        const data = await request(`/server/get_old_graphs/${inputDataSize}`, "POST", {value, a})
+        setImgString(data.img)
+    }
+
+    useEffect(() =>{
+        if (imgString.length !== 0){
+            get_old_graphs()
+        }
+    }, [checkBoxState])
     // const ClickButton  = async() => {
     //     setDisBtn({"value" : true})
     //     const data = await request(`/server/get_info_about_sorts/${inputDataType}/${inputDataSize}`, "POST")
@@ -74,7 +87,6 @@ export const MainPage = () => {
 
 
     const ClickCheckBox = async() => {
-        setImgString("")
         console.log(checkBoxState)
         // const data = await request('/server/chart_update', "POST", {...value})
         // setImgString(data.img_in_bytes)
@@ -82,17 +94,6 @@ export const MainPage = () => {
 
     return (
         <>
-        {(loading) ? (
-            <div style={{display:"flex", justifyContent:"center"}}>
-                <img 
-                    src={`${process.env.PUBLIC_URL}/loading_ytka.gif`}
-                    style={{maxWidth: "33%"}}
-                    >
-                </img>
-            </div>
-        ) : (
-            <p></p>
-        )}
         <div style={{display:"flex", justifyContent:"center"}}>  
             <div style={{display:"inline-block", width:"45%", margin:"2%", paddingTop:"1%"}}>
                 <MyDataSelection 
@@ -119,6 +120,7 @@ export const MainPage = () => {
                             ClickCheckBox = {ClickCheckBox}
                             setCheckBoxState = {setCheckBoxState} 
                             checkBoxState = {checkBoxState}
+                            sortsState = {sortsState}
                         />
                     </>
                     

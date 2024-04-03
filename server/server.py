@@ -18,6 +18,18 @@ def generate_random_data(data_type, data_size):
 
 app = Flask(__name__, static_folder='../client/build', static_url_path='/')
 
+def get_old_graphs(mask, arr , data_size):
+    fig = Figure()
+    ax = fig.subplots()
+    for i in mask:
+        ax.semilogy(range(10, data_size, int((data_size - 10) / 200)), arr[i])
+    
+    buf = BytesIO()
+    fig.savefig(buf, format="png")
+
+    return {"img":base64.b64encode(buf.getbuffer()).decode("ascii")}
+
+
 def get_new_graphs(old_graphs, new_sort_name, data_size):
     '''
     Функция принимает на вход
@@ -100,6 +112,13 @@ def index():
 def generate_new_graphs(new_sort_name, data_size):
     old_graphs = request.get_json()
     return get_new_graphs(old_graphs, new_sort_name, int(data_size))
+
+@app.route('/server/get_old_graphs/<data_size>', methods={"POST"})
+def generate_old_graphs(data_size):
+    old_graphs = request.get_json()
+    mask = old_graphs["a"]
+    arr2 = old_graphs["value"]
+    return get_old_graphs(mask, arr2, int(data_size))
 
 @app.route('/server/get_new_graphs/test/<new_sort_name>/<data_size>', methods=["POST"])
 def test_test(new_sort_name, data_size):
