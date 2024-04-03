@@ -10,6 +10,15 @@ from io import BytesIO
 
 app = Flask(__name__, static_folder='../client/build', static_url_path='/')
 
+
+def _test():
+    """
+    Задача - красиво оформить координаты с 4 графиками
+    (настроить цвета, сделать шапку, легенду)
+    """
+    pass
+
+
 def get_old_graphs(mask, arr , data_size):
     fig = Figure()
     ax = fig.subplots()

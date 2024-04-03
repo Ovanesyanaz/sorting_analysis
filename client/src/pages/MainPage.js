@@ -115,7 +115,7 @@ export const MainPage = () => {
                 {(imgString.length === 0) ? (
                     <p></p>
                 ) : (
-                    <div style={{display:"inline-block", width:"45%", margin:"2%"}}>
+                    <div style={{display:"inline-block", width:"45%", margin:"2%", marginTop:"0%"}}>
                         <img alt="" width={"100%"} src={(`data:image/jpg;base64,${imgString}`)} />
                     </div>
                 )}
