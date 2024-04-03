@@ -1,17 +1,17 @@
 import React, { useEffect, useState} from "react";
 import { MyButton } from "../components/UI/MyButton.js"
 import { useHttp } from "../hooks/http.hook.js"
-import { useLocalStorage } from "../hooks/useLocalStorage.hook.js";
 import { MySortsList } from "../components/MySortsList.js";
 import { MyDataSelection } from "../components/MyDataSelection.js";
 
 export const MainPage = () => {
-    const [iter, setIter] = useState([], 0)
+    const [iterforbutton, setIterforbutton] = useState([], {"iter" : ""})
     const [imgString, setImgString] = useState([],"")
     const {loading, request} = useHttp()
     const [disBtn, setDisBtn] = useState([], {"value" : false})
     const [sortsState, setSortsState] = useState([], ["quicksort", "booblesort", "insertsort", "selectsort"])
-    const [value, setValue] = useLocalStorage([], "sorts_data")
+    const [checkBoxState, setCheckBoxState] = useState([], ["quicksort", "booblesort", "insertsort", "selectsort"])
+    const [value, setValue] = useState([], {})
     const [inputDataType, setInputDataType] = useState([], '')
     const [inputDataSize, setInputDataSize] = useState([], '')
     const dataType = ["default data","bad data for quicksort", "bad data for mergesort"]
@@ -20,7 +20,8 @@ export const MainPage = () => {
         //setSortsState(["quicksort", "booblesort", "insertsort", "selectsort"])
         setSortsState(["quick_sort", "merge_sort", "insertion_sort", "bubble_sort"])
         setInputDataSize("1000")
-        setValue([])
+        setValue({})
+        setIterforbutton("")
         console.log("hello from useEffect")
         setInputDataType(dataType[0])
     }, [])
@@ -34,42 +35,49 @@ export const MainPage = () => {
     //     setDisBtn({"value" : false})
     // }
 
-    useEffect(() => {
-        console.log(value, "from useEffect")
-    }, [value])
 
     useEffect(() => {
-
-        if (value.length !== 0 && sortsState[value.length] !== undefined){
+        console.log("useEffect")
+        if (iterforbutton.length !== sortsState.length && iterforbutton.length !== 0){
             ClickButton()
         }
+        if (iterforbutton.length === sortsState.length && iterforbutton.length !== 0){
+            setIterforbutton("")
+        }
+        // else if (value.length !== 0 && sortsState[value.length] !== undefined){
+        //     ClickButton()
+        // }
 
 
     }, [value])
     
 
     const ClickButton = async() => {
-        if (sortsState[value.length] !== undefined){
-            setValue([])
-        }
-            setDisBtn({"value" : true})
-            const data = await request(`/server/get_new_graphs/${sortsState[value.length]}/${inputDataSize}`, "POST", {value})
+        setDisBtn({"value" : true})
+        setIterforbutton(iterforbutton + 1)
+        console.log(value)
+        if (value.bubble_sort !== undefined){
+            console.log("!=undefined")
+            const data = await request(`/server/get_new_graphs/${sortsState[0]}/${inputDataSize}`, "POST", {})
             setValue(data.info_about_sort)
             setImgString(data.img) 
-
-        // for (const sort of sortsState){
-        //     const data = await request(`/server/get_new_graphs/${sort}/${inputDataSize}`, "POST", {value})
-        //     setValue(data.info_about_sort.value)
-        //     setImgString(data.img)
-        // }
-        setDisBtn({"value" : false})
+            setDisBtn({"value" : false})
+        }
+        else{
+            console.log("==undefined")
+            const data = await request(`/server/get_new_graphs/${sortsState[iterforbutton.length]}/${inputDataSize}`, "POST", {...value})
+            setValue(data.info_about_sort)
+            setImgString(data.img) 
+            setDisBtn({"value" : false})    
+        }
     }
 
 
     const ClickCheckBox = async() => {
         setImgString("")
-        const data = await request('/server/chart_update', "POST", value)
-        setImgString(data.img_in_bytes)
+        console.log(checkBoxState)
+        // const data = await request('/server/chart_update', "POST", {...value})
+        // setImgString(data.img_in_bytes)
     }
 
     return (
@@ -109,8 +117,8 @@ export const MainPage = () => {
                     <>
                         <MySortsList
                             ClickCheckBox = {ClickCheckBox}
-                            setSortsState = {setSortsState} 
-                            sortsState = {sortsState}
+                            setCheckBoxState = {setCheckBoxState} 
+                            checkBoxState = {checkBoxState}
                         />
                     </>
                     
