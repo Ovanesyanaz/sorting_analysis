@@ -18,7 +18,7 @@ export const MainPage = () => {
     
     useEffect(()=>{
         //setSortsState(["quicksort", "booblesort", "insertsort", "selectsort"])
-        setSortsState(["quick_sort", "insertion_sort", "bubble_sort"])
+        setSortsState(["quick_sort", "merge_sort", "insertion_sort", "bubble_sort"])
         setInputDataSize("1000")
         setValue([])
         console.log("hello from useEffect")

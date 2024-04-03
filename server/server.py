@@ -42,6 +42,7 @@ def get_new_graphs(old_graphs, new_sort_name, data_size):
     lib.bubble_sort_with_timer.restype = ctypes.c_double
     lib.insertion_sort_with_timer.restype = ctypes.c_double
     lib.quick_sort_with_timer.restype = ctypes.c_double
+    lib.merge_sort_with_timer.restype = ctypes.c_double
     info_about_new_sort = []
 
     if (new_sort_name == "quick_sort"):
@@ -51,14 +52,20 @@ def get_new_graphs(old_graphs, new_sort_name, data_size):
             info_about_new_sort.append(lib.quick_sort_with_timer(arr_1, len(arr_1)))
         old_graphs = [{"quick_sort" : info_about_new_sort}]
 
+    if (new_sort_name == "merge_sort"):
+        for i in range(10, data_size, int((data_size - 10) / 200)):
+            py_values = [random.randint(1, 1000) for _ in range(i)]
+            arr_1 = (ctypes.c_int * len(py_values))(*py_values)
+            info_about_new_sort.append(lib.merge_sort_with_timer(arr_1, len(arr_1)))
+
+        old_graphs = [*(old_graphs["value"]), {"insertion_sort" : info_about_new_sort}]
+
     if (new_sort_name == "insertion_sort"):
         for i in range(10, data_size, int((data_size - 10) / 200)):
             py_values = [random.randint(1, 1000) for _ in range(i)]
             arr_1 = (ctypes.c_int * len(py_values))(*py_values)
             info_about_new_sort.append(lib.insertion_sort_with_timer(arr_1, len(arr_1)))
 
-        #old_graphs["value"] = old_graphs["value"].append({"insertion_sort" : info_about_new_sort})
-        print("-------------------------", old_graphs)
         old_graphs = [*(old_graphs["value"]), {"insertion_sort" : info_about_new_sort}]
 
     if (new_sort_name == "bubble_sort"):
