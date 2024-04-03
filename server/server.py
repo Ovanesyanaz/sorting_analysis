@@ -6,6 +6,7 @@ import ctypes
 import random
 import os
 import base64
+import platform
 from io import BytesIO
 
 app = Flask(__name__, static_folder='../client/build', static_url_path='/')
@@ -43,6 +44,14 @@ def get_new_graphs(old_graphs, new_sort_name, data_size):
     + 
     обновленная информация и графике (новый объект в массиве объектов old_graphs)
     '''    
+    dir_path = os.path.dirname(os.path.realpath(__file__))
+    lib_path = ""
+    match platform.system():
+        case "Linux": lib_path = "/build/libsorts.so"
+        case "Darwin": lib_path = "/build/libsorts.dylib"
+        case "Windows": lib_path = "\\build\\libsorts.dll"
+        case _: raise RuntimeError("undefined platform")
+    
     dir_path = os.path.dirname(os.path.realpath(__file__))
     lib = ctypes.cdll.LoadLibrary(dir_path + "/libc/build/libsorts.dylib")
     lib.bubble_sort_with_timer.restype = ctypes.c_double
