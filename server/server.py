@@ -14,53 +14,19 @@ from io import BytesIO
 
 app = Flask(__name__, static_folder='../client/build', static_url_path='/')
 
-
-def _test():
-    """
-    Задача - красиво оформить координаты с 4 графиками
-    (настроить цвета, сделать шапку, легенду)
-    """
-    # Рандомно сгенерированные массивы, чтобы посмтреть на график
-    abscissa = np.arange(1, 100)
-    b_sort = np.array(abscissa) ** 2 + np.random.randint(0, np.max(abscissa) * 2, len(abscissa))
-    m_sort = np.array(abscissa * np.log2(abscissa)) + np.random.randint(0, np.max(abscissa) * 2, len(abscissa))
-    q_sort = np.array(abscissa * np.log2(abscissa)) + np.random.randint(0, np.max(abscissa) * 2, len(abscissa))
-    i_sort = np.array(abscissa) ** 2 + np.random.randint(0, np.max(abscissa) * 2, len(abscissa))
-
-    sorts = {"Bubble": b_sort, "Quick": q_sort, "Merge": m_sort, "Insertion": i_sort}
-
-
-    fig, axis = plt.subplots(figsize=(14, 8))
-
-    # Размещаем масссивы на графике
-    for key in sorts:
-        print(key)
-        axis.plot(
-            abscissa,
-            sorts[key],
-            label=f"{key}",
-        )
-    
-    # Названия, подписи и тд
-    axis.set_title("Time from size", fontsize="24", fontweight="17")
-    axis.set_ylabel("Time", fontsize="14")
-    axis.set_xlabel("Size", fontsize="14")
-
-    axis.set_xticks(np.arange(0, 101, 5))
-    axis.set_yticks(np.arange(0, np.max(b_sort) + 1, 1000))
-
-    axis.set_xlim(np.min(abscissa), np.max(abscissa) + 1)
-
-    plt.legend()
-    plt.show()
-
+@app.route('/')
+def index():
+    return app.send_static_file('index.html')
 
 def get_old_graphs(mask, arr , data_size):
     fig = Figure()
     ax = fig.subplots()
     for i in mask:
-        ax.semilogy(range(10, data_size, int((data_size - 10) / 200)), arr[i])
-    
+        ax.semilogy(range(10, data_size, int((data_size - 10) / 200)), arr[i], label=f"{i}")
+    ax.set_title("Time from size", fontsize="24", fontweight="17")
+    ax.set_ylabel("Time", fontsize="14")
+    ax.set_xlabel("Size", fontsize="14")
+    ax.legend()
     buf = BytesIO()
     fig.savefig(buf, format="png")
 
@@ -97,7 +63,7 @@ def get_new_graphs(old_graphs, new_sort_name, data_size):
     fig = Figure()
     ax = fig.subplots()
     for i in old_graphs:
-       ax.semilogy(range(10, data_size, int((data_size - 10) / 200)), old_graphs[i])
+       ax.semilogy(range(10, data_size, int((data_size - 10) / 200)), old_graphs[i], label=f"{i}")
 
     info_about_new_sort = []
 
@@ -132,15 +98,15 @@ def get_new_graphs(old_graphs, new_sort_name, data_size):
 
         old_graphs["bubble_sort"] = info_about_new_sort
     
-    ax.semilogy(range(10, data_size, int((data_size - 10) / 200)), info_about_new_sort)
+    ax.semilogy(range(10, data_size, int((data_size - 10) / 200)), info_about_new_sort, label=f"{new_sort_name}")
+    ax.set_title("Time from size", fontsize="24", fontweight="17")
+    ax.set_ylabel("Time", fontsize="14")
+    ax.set_xlabel("Size", fontsize="14")
+    ax.legend()
     buf = BytesIO()
     fig.savefig(buf, format="png")
 
     return {"img":base64.b64encode(buf.getbuffer()).decode("ascii"), "info_about_sort": old_graphs}
-
-@app.route('/')
-def index():
-    return app.send_static_file('index.html')
 
 @app.route('/server/get_new_graphs/<new_sort_name>/<data_size>', methods=["POST"])
 def generate_new_graphs(new_sort_name, data_size):
