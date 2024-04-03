@@ -17,7 +17,6 @@ export const MainPage = () => {
     const dataType = ["default data","bad data for quicksort", "bad data for mergesort"]
 
     useEffect(()=>{
-        //setSortsState(["quicksort", "booblesort", "insertsort", "selectsort"])
         setSortsState(["quick_sort", "merge_sort", "insertion_sort", "bubble_sort"])
         setCheckBoxState(["quick_sort", "merge_sort", "insertion_sort", "bubble_sort"])
         setInputDataSize("1000")
@@ -39,14 +38,6 @@ export const MainPage = () => {
             get_old_graphs()
         }
     }, [checkBoxState])
-    // const ClickButton  = async() => {
-    //     setDisBtn({"value" : true})
-    //     const data = await request(`/server/get_info_about_sorts/${inputDataType}/${inputDataSize}`, "POST")
-    //     setValue([...data.info_about_sorts])
-    //     setImgString(data.img_in_bytes)
-    //     console.log(data)
-    //     setDisBtn({"value" : false})
-    // }
 
 
     useEffect(() => {
@@ -57,9 +48,6 @@ export const MainPage = () => {
         if (iterforbutton.length === sortsState.length && iterforbutton.length !== 0){
             setIterforbutton("")
         }
-        // else if (value.length !== 0 && sortsState[value.length] !== undefined){
-        //     ClickButton()
-        // }
 
 
     }, [value])
@@ -88,12 +76,9 @@ export const MainPage = () => {
 
     const ClickCheckBox = async() => {
         console.log(checkBoxState)
-        // const data = await request('/server/chart_update', "POST", {...value})
-        // setImgString(data.img_in_bytes)
     }
 
     return (
-        <>
         <div style={{display:"flex", justifyContent:"center"}}>  
             <div style={{display:"inline-block", width:"45%", margin:"2%", paddingTop:"1%"}}>
                 <MyDataSelection 
@@ -103,7 +88,7 @@ export const MainPage = () => {
                     Item={dataType} 
                     setInputDataType={setInputDataType} 
                     setInputDataSize={setInputDataSize}
-                    maxValue = {1000000}
+                    maxValue = {100000}
                 />
 
                 <MyButton 
@@ -137,18 +122,5 @@ export const MainPage = () => {
 
 
         </div>
-        </>
     )
 }
-
-// const ClickButton = async() => {
-//     setDisBtn({"value" : true})
-//     const data = await request("/test", "POST", sortsState)
-//     console.log(data)
-//     setValue([...data])
-//     setSortsState([...data])
-//     setDisBtn({"value" : false})
-// }
-
-{/* <MySortsList sortsState={sortsState} setSortsState={setSortsState}/>
-<MyButton disabled = {disBtn.value} onclk = {ClickButton}/> */}
