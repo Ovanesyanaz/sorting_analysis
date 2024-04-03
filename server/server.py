@@ -1,13 +1,16 @@
-from flask import Flask
-from flask import request
-from matplotlib.figure import Figure
 import matplotlib.pyplot as plt
+import numpy as np
+import platform
 import ctypes
 import random
-import os
 import base64
-import platform
+import os
+
+from matplotlib.figure import Figure
+from flask import request
+from flask import Flask
 from io import BytesIO
+
 
 app = Flask(__name__, static_folder='../client/build', static_url_path='/')
 
@@ -17,7 +20,39 @@ def _test():
     Задача - красиво оформить координаты с 4 графиками
     (настроить цвета, сделать шапку, легенду)
     """
-    pass
+    # Рандомно сгенерированные массивы, чтобы посмтреть на график
+    abscissa = np.arange(1, 100)
+    b_sort = np.array(abscissa) ** 2 + np.random.randint(0, np.max(abscissa) * 2, len(abscissa))
+    m_sort = np.array(abscissa * np.log2(abscissa)) + np.random.randint(0, np.max(abscissa) * 2, len(abscissa))
+    q_sort = np.array(abscissa * np.log2(abscissa)) + np.random.randint(0, np.max(abscissa) * 2, len(abscissa))
+    i_sort = np.array(abscissa) ** 2 + np.random.randint(0, np.max(abscissa) * 2, len(abscissa))
+
+    sorts = {"Bubble": b_sort, "Quick": q_sort, "Merge": m_sort, "Insertion": i_sort}
+
+
+    fig, axis = plt.subplots(figsize=(14, 8))
+
+    # Размещаем масссивы на графике
+    for key in sorts:
+        print(key)
+        axis.plot(
+            abscissa,
+            sorts[key],
+            label=f"{key}",
+        )
+    
+    # Названия, подписи и тд
+    axis.set_title("Time from size", fontsize="24", fontweight="17")
+    axis.set_ylabel("Time", fontsize="14")
+    axis.set_xlabel("Size", fontsize="14")
+
+    axis.set_xticks(np.arange(0, 101, 5))
+    axis.set_yticks(np.arange(0, np.max(b_sort) + 1, 1000))
+
+    axis.set_xlim(np.min(abscissa), np.max(abscissa) + 1)
+
+    plt.legend()
+    plt.show()
 
 
 def get_old_graphs(mask, arr , data_size):
@@ -96,7 +131,6 @@ def get_new_graphs(old_graphs, new_sort_name, data_size):
             info_about_new_sort.append(lib.bubble_sort_with_timer(arr_1, len(arr_1)))
 
         old_graphs["bubble_sort"] = info_about_new_sort
-    
     
     ax.semilogy(range(10, data_size, int((data_size - 10) / 200)), info_about_new_sort)
     buf = BytesIO()
