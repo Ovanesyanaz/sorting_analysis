@@ -15,6 +15,16 @@ export const MainPage = () => {
     const [inputDataType, setInputDataType] = useState([], '')
     const [inputDataSize, setInputDataSize] = useState([], '')
     const dataType = ["default data","bad data for quicksort", "bad data for mergesort"]
+    
+    useEffect(()=>{
+        //setSortsState(["quicksort", "booblesort", "insertsort", "selectsort"])
+        setSortsState(["quick_sort", "insertion_sort", "bubble_sort"])
+        setInputDataSize("1000")
+        setValue([])
+        console.log("hello from useEffect")
+        setInputDataType(dataType[0])
+    }, [])
+
     // const ClickButton  = async() => {
     //     setDisBtn({"value" : true})
     //     const data = await request(`/server/get_info_about_sorts/${inputDataType}/${inputDataSize}`, "POST")
@@ -28,30 +38,39 @@ export const MainPage = () => {
         console.log(value, "from useEffect")
     }, [value])
 
-    const ClickButton = async() => {
-        setDisBtn({"value" : true})
-        setValue([])
-        for (const sort of sortsState){
-            const data = await request(`/server/get_new_graphs/${sort}/${inputDataSize}`, "POST", {value})
-            setValue(data.info_about_sort.value)
-            setImgString(data.img)
+    useEffect(() => {
+
+        if (value.length !== 0 && sortsState[value.length] !== undefined){
+            ClickButton()
         }
+
+
+    }, [value])
+    
+
+    const ClickButton = async() => {
+        if (sortsState[value.length] !== undefined){
+            setValue([])
+        }
+            setDisBtn({"value" : true})
+            const data = await request(`/server/get_new_graphs/${sortsState[value.length]}/${inputDataSize}`, "POST", {value})
+            setValue(data.info_about_sort)
+            setImgString(data.img) 
+
+        // for (const sort of sortsState){
+        //     const data = await request(`/server/get_new_graphs/${sort}/${inputDataSize}`, "POST", {value})
+        //     setValue(data.info_about_sort.value)
+        //     setImgString(data.img)
+        // }
         setDisBtn({"value" : false})
     }
+
 
     const ClickCheckBox = async() => {
         setImgString("")
         const data = await request('/server/chart_update', "POST", value)
         setImgString(data.img_in_bytes)
     }
-
-    useEffect(()=>{
-        //setSortsState(["quicksort", "booblesort", "insertsort", "selectsort"])
-        setSortsState(["insertion_sort", "bubble_sort"])
-        setInputDataSize("1000")
-        console.log("hello from useEffect")
-        setInputDataType(dataType[0])
-    }, [])
 
     return (
         <>
