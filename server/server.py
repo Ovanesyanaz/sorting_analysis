@@ -23,7 +23,7 @@ def get_old_graphs(mask, arr , data_size):
     ax = fig.subplots()
     for i in mask:
         ax.semilogy(range(10, data_size, int((data_size - 10) / 200)), arr[i], label=f"{i}")
-    ax.set_title("Time from size", fontsize="24", fontweight="17")
+    ax.set_title("Sorting analysis", fontsize="24", fontweight="17")
     ax.set_ylabel("Time", fontsize="14")
     ax.set_xlabel("Size", fontsize="14")
     ax.legend()
@@ -99,10 +99,11 @@ def get_new_graphs(old_graphs, new_sort_name, data_size):
         old_graphs["bubble_sort"] = info_about_new_sort
     
     ax.semilogy(range(10, data_size, int((data_size - 10) / 200)), info_about_new_sort, label=f"{new_sort_name}")
-    ax.set_title("Time from size", fontsize="24", fontweight="17")
+    ax.set_title("Sorting analysis", fontsize="24", fontweight="17")
     ax.set_ylabel("Time", fontsize="14")
     ax.set_xlabel("Size", fontsize="14")
     ax.legend()
+    plt.style.use('seaborn-v0_8-colorblind')
     buf = BytesIO()
     fig.savefig(buf, format="png")
 
