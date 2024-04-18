@@ -3,10 +3,13 @@ import { MyButton } from "../components/UI/MyButton.js"
 import { useHttp } from "../hooks/http.hook.js"
 import { MySortsList } from "../components/MySortsList.js";
 import { MyDataSelection } from "../components/MyDataSelection.js";
+import { io } from "socket.io-client"
+let socket;
 
 export const MainPage = () => {
     const [iterforbutton, setIterforbutton] = useState([], {"iter" : ""})
     const [imgString, setImgString] = useState([],"")
+    const [amount, setAmount] = useState([], 0)
     const {loading, request} = useHttp()
     const [disBtn, setDisBtn] = useState([], {"value" : false})
     const [sortsState, setSortsState] = useState([], ["quicksort", "booblesort", "insertsort", "selectsort"])
@@ -16,7 +19,8 @@ export const MainPage = () => {
     const [inputDataSize, setInputDataSize] = useState([], '')
     const dataType = ["default data","bad data for quicksort", "bad data for mergesort"]
 
-    useEffect(()=>{
+    useEffect(() => {
+        setAmount(0)
         setSortsState(["quick_sort", "merge_sort", "insertion_sort", "bubble_sort"])
         setCheckBoxState(["quick_sort", "merge_sort", "insertion_sort", "bubble_sort"])
         setInputDataSize("1000")
@@ -24,6 +28,20 @@ export const MainPage = () => {
         setIterforbutton("")
         console.log("hello from useEffect")
         setInputDataType(dataType[0])
+    }, [])
+
+    useEffect(() => {
+        socket = io();
+
+        socket.on("chat", (data) => {
+            console.log(data)
+            setValue(data.info_about_sort)
+            setImgString(data.img) 
+        })
+        return (() => {
+            socket.disconnect()
+        })
+
     }, [])
 
     const get_old_graphs = async() => {
@@ -40,18 +58,18 @@ export const MainPage = () => {
     }, [checkBoxState])
 
 
-    useEffect(() => {
-        console.log("useEffect")
-        if (iterforbutton.length !== sortsState.length && iterforbutton.length !== 0){
-            ClickButton()
-        }
-        if (iterforbutton.length === sortsState.length && iterforbutton.length !== 0){
-            setIterforbutton("")
-        }
+    // useEffect(() => {
+    //     console.log("useEffect")
+    //     if (iterforbutton.length !== sortsState.length && iterforbutton.length !== 0){
+    //         ClickButton()
+    //     }
+    //     if (iterforbutton.length === sortsState.length && iterforbutton.length !== 0){
+    //         setIterforbutton("")
+    //     }
 
 
-    }, [value])
-    
+    // }, [value])
+
 
     const ClickButton = async() => {
         setDisBtn({"value" : true})
@@ -73,6 +91,9 @@ export const MainPage = () => {
         }
     }
 
+    const getWS = () => {
+        socket.emit("chat", {dataSize: inputDataSize, sorts:sortsState})
+    }
 
     const ClickCheckBox = async() => {
         console.log(checkBoxState)
@@ -89,6 +110,11 @@ export const MainPage = () => {
                     setInputDataType={setInputDataType} 
                     setInputDataSize={setInputDataSize}
                     maxValue = {100000}
+                />
+
+                <MyButton
+                    onclk = {getWS}
+                    children = "click for ws"
                 />
 
                 <MyButton 
