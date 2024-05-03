@@ -11,7 +11,7 @@ export const MainPage = () => {
     const [imgString, setImgString] = useState([],"")
     const [amount, setAmount] = useState([], 0)
     const {loading, request} = useHttp()
-    const [disBtn, setDisBtn] = useState([], {"value" : false})
+    const [disBtn, setDisBtn] = useState([], false)
     const [sortsState, setSortsState] = useState([], ["quicksort", "booblesort", "insertsort", "selectsort"])
     const [checkBoxState, setCheckBoxState] = useState([], ["quicksort", "booblesort", "insertsort", "selectsort"])
     const [value, setValue] = useState([], {})
@@ -24,6 +24,7 @@ export const MainPage = () => {
         setSortsState(["quick_sort", "merge_sort", "insertion_sort", "bubble_sort"])
         setCheckBoxState(["quick_sort", "merge_sort", "insertion_sort", "bubble_sort"])
         setInputDataSize("1000")
+        setDisBtn(false)
         setValue({})
         setIterforbutton("")
         console.log("hello from useEffect")
@@ -35,6 +36,9 @@ export const MainPage = () => {
 
         socket.on("chat", (data) => {
             console.log(data)
+            if (data.isEnd){
+                setDisBtn(false)
+            }
             setValue(data.info_about_sort)
             setImgString(data.img) 
         })
@@ -92,7 +96,8 @@ export const MainPage = () => {
     }
 
     const getWS = () => {
-        socket.emit("chat", {dataSize: inputDataSize, sorts:sortsState})
+        setDisBtn(true)
+        socket.emit("chat", {dataSize: inputDataSize, sorts:checkBoxState})
     }
 
     const ClickCheckBox = async() => {
@@ -113,29 +118,19 @@ export const MainPage = () => {
                 />
 
                 <MyButton
+                    disabled = {disBtn}
                     onclk = {getWS}
-                    children = "click for ws"
-                />
-
-                <MyButton 
-                    disabled = {disBtn.value} 
-                    onclk = {ClickButton}  
                     children = "click for Sorting"
                 />
 
-                {(imgString.length === 0) ? (
-                    <p></p>
-                ) : (
-                    <>
-                        <MySortsList
-                            ClickCheckBox = {ClickCheckBox}
-                            setCheckBoxState = {setCheckBoxState} 
-                            checkBoxState = {checkBoxState}
-                            sortsState = {sortsState}
-                        />
-                    </>
-                    
-                )}
+                <MySortsList
+                    style={{}}
+                    ClickCheckBox = {ClickCheckBox}
+                    setCheckBoxState = {setCheckBoxState} 
+                    checkBoxState = {checkBoxState}
+                    sortsState = {sortsState}
+                />
+
             </div>
 
                 {(imgString.length === 0) ? (

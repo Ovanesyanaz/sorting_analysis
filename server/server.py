@@ -31,6 +31,8 @@ def get_old_graphs(mask, arr , data_size):
     fig = Figure()
     ax = fig.subplots()
     for i in mask:
+        if i not in arr:
+            continue
         ax.semilogy(range(10, data_size, int((data_size - 10) / 200)), arr[i], label=f"{i}")
     ax.set_title("Sorting analysis", fontsize="24", fontweight="17")
     ax.set_ylabel("Time", fontsize="14")
@@ -162,20 +164,28 @@ def handle_chat(data):
         info_about_new_sort = []
         amount = 0
         if (new_sort_name == "quick_sort"):
+            for i in old_graphs:
+                ax.semilogy(range(10, data_size, int((data_size - 10) / 200)), old_graphs[i], label=f"{i}")
+            
             for i in range(10, data_size, int((data_size - 10) / 200)):
                 amount += 1
                 py_values = [random.randint(1, 1000) for _ in range(i)]
-                arr_1 = (ctypes.c_int * len(py_values))(*py_values)
-                info_about_new_sort.append(lib.quick_sort_with_timer(arr_1, len(arr_1)))
-                if amount == 20:
-                    amount = 0
+                summ = 0
+                for k in range(3):
+                    arr_1 = (ctypes.c_int * len(py_values))(*py_values)
+                    summ += (lib.quick_sort_with_timer(arr_1, len(arr_1)))
+                info_about_new_sort.append(summ / 3)
+                
+                if amount % 20 == 0:
+                    if amount == 20:
+                        ax.semilogy(list(range(10, data_size, int((data_size - 10) / 200)))[:len(info_about_new_sort)], info_about_new_sort, label=f"{new_sort_name}")
+                        ax.legend()
                     ax.semilogy(list(range(10, data_size, int((data_size - 10) / 200)))[:len(info_about_new_sort)], info_about_new_sort)
                     buf = BytesIO()
                     fig.savefig(buf, format="png")
                     emit("chat", {"img":base64.b64encode(buf.getbuffer()).decode("ascii"), "info_about_sort": old_graphs}, broadcast=True)        
             old_graphs["quick_sort"] = info_about_new_sort
             ax.semilogy(list(range(10, data_size, int((data_size - 10) / 200)))[:len(info_about_new_sort)], info_about_new_sort, label=f"{new_sort_name}")
-            ax.legend()
             buf = BytesIO()
             fig.savefig(buf, format="png")
             emit("chat", {"img":base64.b64encode(buf.getbuffer()).decode("ascii"), "info_about_sort": old_graphs}, broadcast=True)
@@ -185,17 +195,21 @@ def handle_chat(data):
             for i in range(10, data_size, int((data_size - 10) / 200)):
                 amount += 1
                 py_values = [random.randint(1, 1000) for _ in range(i)]
-                arr_1 = (ctypes.c_int * len(py_values))(*py_values)
-                info_about_new_sort.append(lib.merge_sort_with_timer(arr_1, len(arr_1)))
-                if amount == 20:
-                    amount = 0
+                summ = 0
+                for k in range(3):
+                    arr_1 = (ctypes.c_int * len(py_values))(*py_values)
+                    summ += (lib.merge_sort_with_timer(arr_1, len(arr_1)))
+                info_about_new_sort.append(summ / 3)
+                if amount % 20 == 0:
+                    if amount == 20:
+                        ax.semilogy(list(range(10, data_size, int((data_size - 10) / 200)))[:len(info_about_new_sort)], info_about_new_sort, label=f"{new_sort_name}")
+                        ax.legend()
                     ax.semilogy(list(range(10, data_size, int((data_size - 10) / 200)))[:len(info_about_new_sort)], info_about_new_sort)
                     buf = BytesIO()
                     fig.savefig(buf, format="png")
                     emit("chat", {"img":base64.b64encode(buf.getbuffer()).decode("ascii"), "info_about_sort": old_graphs}, broadcast=True)        
             old_graphs["merge_sort"] = info_about_new_sort
             ax.semilogy(list(range(10, data_size, int((data_size - 10) / 200)))[:len(info_about_new_sort)], info_about_new_sort, label=f"{new_sort_name}")
-            ax.legend()
             buf = BytesIO()
             fig.savefig(buf, format="png")
             emit("chat", {"img":base64.b64encode(buf.getbuffer()).decode("ascii"), "info_about_sort": old_graphs}, broadcast=True)
@@ -205,32 +219,41 @@ def handle_chat(data):
             for i in range(10, data_size, int((data_size - 10) / 200)):
                 amount += 1
                 py_values = [random.randint(1, 1000) for _ in range(i)]
-                arr_1 = (ctypes.c_int * len(py_values))(*py_values)
-                info_about_new_sort.append(lib.insertion_sort_with_timer(arr_1, len(arr_1)))
-                if amount == 20:
-                    amount = 0
+                summ = 0
+                for k in range(3):
+                    arr_1 = (ctypes.c_int * len(py_values))(*py_values)
+                    summ += lib.insertion_sort_with_timer(arr_1, len(arr_1))
+                info_about_new_sort.append(summ / 3)
+                if amount % 5 == 0:
+                    if amount == 5:
+                        ax.semilogy(list(range(10, data_size, int((data_size - 10) / 200)))[:len(info_about_new_sort)], info_about_new_sort, label=f"{new_sort_name}")
+                        ax.legend()
                     ax.semilogy(list(range(10, data_size, int((data_size - 10) / 200)))[:len(info_about_new_sort)], info_about_new_sort)
                     buf = BytesIO()
                     fig.savefig(buf, format="png")
                     emit("chat", {"img":base64.b64encode(buf.getbuffer()).decode("ascii"), "info_about_sort": old_graphs}, broadcast=True)        
             old_graphs["insertion_sort"] = info_about_new_sort
             ax.semilogy(list(range(10, data_size, int((data_size - 10) / 200)))[:len(info_about_new_sort)], info_about_new_sort, label=f"{new_sort_name}")
-            ax.legend()
             buf = BytesIO()
             fig.savefig(buf, format="png")
             emit("chat", {"img":base64.b64encode(buf.getbuffer()).decode("ascii"), "info_about_sort": old_graphs}, broadcast=True)
-        
 
         if (new_sort_name == "bubble_sort"):
+            amount = 0
             for i in old_graphs:
                 ax.semilogy(range(10, data_size, int((data_size - 10) / 200)), old_graphs[i], label=f"{i}")
             for i in range(10, data_size, int((data_size - 10) / 200)):
                 amount += 1
                 py_values = [random.randint(1, 1000) for _ in range(i)]
-                arr_1 = (ctypes.c_int * len(py_values))(*py_values)
-                info_about_new_sort.append(lib.bubble_sort_with_timer(arr_1, len(arr_1)))
-                if amount == 20:
-                    amount = 0
+                summ = 0
+                for k in range(3):
+                    arr_1 = (ctypes.c_int * len(py_values))(*py_values)
+                    summ += lib.bubble_sort_with_timer(arr_1, len(arr_1))
+                info_about_new_sort.append(summ / 3)
+                if amount % 5 == 0:
+                    if amount == 5:
+                        ax.semilogy(list(range(10, data_size, int((data_size - 10) / 200)))[:len(info_about_new_sort)], info_about_new_sort, label=f"{new_sort_name}")
+                        ax.legend()
                     ax.semilogy(list(range(10, data_size, int((data_size - 10) / 200)))[:len(info_about_new_sort)], info_about_new_sort)
                     buf = BytesIO()
                     fig.savefig(buf, format="png")
@@ -241,7 +264,19 @@ def handle_chat(data):
             buf = BytesIO()
             fig.savefig(buf, format="png")
             emit("chat", {"img":base64.b64encode(buf.getbuffer()).decode("ascii"), "info_about_sort": old_graphs}, broadcast=True)
-        
+    fig.clf()
+    fig = Figure()
+    ax = fig.subplots()
+    ax.set_title("Sorting analysis", fontsize="24", fontweight="17")
+    ax.set_ylabel("Time", fontsize="14")
+    ax.set_xlabel("Size", fontsize="14")
+    plt.style.use('seaborn-v0_8-colorblind')
+    for i in old_graphs:
+            ax.semilogy(range(10, data_size, int((data_size - 10) / 200)), old_graphs[i], label=f"{i}")
+    ax.legend()
+    buf = BytesIO()
+    fig.savefig(buf, format="png")
+    emit("chat", {"img":base64.b64encode(buf.getbuffer()).decode("ascii"), "info_about_sort": old_graphs, "isEnd": 1}, broadcast=True)
 
 if __name__ == "__main__":
     socketio.run(app)

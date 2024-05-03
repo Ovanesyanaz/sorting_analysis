@@ -2,7 +2,6 @@ import React, {useState} from "react"
 import { MyTypography } from "./UI/MyTypography"
 
 export const MySort = (props) => {
-    console.log(props.name)
     const [checked, setChecked] = useState((props.checkBoxState.filter((ar) => ar === props.name)).length !== 0);
 	
 	async function handleChange(event) {
