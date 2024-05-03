@@ -64,7 +64,7 @@ def get_new_graphs(old_graphs, new_sort_name, data_size):
         case _: raise RuntimeError("undefined platform")
     
     dir_path = os.path.dirname(os.path.realpath(__file__))
-    lib = ctypes.cdll.LoadLibrary(dir_path + "/libc/build/libsorts.dylib")
+    lib = ctypes.cdll.LoadLibrary(dir_path + "/libc/" + lib_path)
     lib.bubble_sort_with_timer.restype = ctypes.c_double
     lib.insertion_sort_with_timer.restype = ctypes.c_double
     lib.quick_sort_with_timer.restype = ctypes.c_double
@@ -150,7 +150,7 @@ def handle_chat(data):
             case _: raise RuntimeError("undefined platform")
         
         dir_path = os.path.dirname(os.path.realpath(__file__))
-        lib = ctypes.cdll.LoadLibrary(dir_path + "/libc/build/libsorts.dylib")
+        lib = ctypes.cdll.LoadLibrary(dir_path + "/libc/" + lib_path)
         lib.bubble_sort_with_timer.restype = ctypes.c_double
         lib.insertion_sort_with_timer.restype = ctypes.c_double
         lib.quick_sort_with_timer.restype = ctypes.c_double
