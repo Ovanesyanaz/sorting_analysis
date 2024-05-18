@@ -16,6 +16,7 @@ export const MainPage = () => {
     const [checkBoxState, setCheckBoxState] = useState([], ["quicksort", "booblesort", "insertsort", "selectsort"])
     const [value, setValue] = useState([], {})
     const [inputDataType, setInputDataType] = useState([], '')
+    const [inputDifferentValue, setInputDifferentValue] = useState([], '')
     const [inputDataSize, setInputDataSize] = useState([], '')
     const dataType = ["default data","bad data for quicksort", "bad data for mergesort"]
 
@@ -24,6 +25,7 @@ export const MainPage = () => {
         setSortsState(["quick_sort", "merge_sort", "insertion_sort", "bubble_sort"])
         setCheckBoxState(["quick_sort", "merge_sort", "insertion_sort", "bubble_sort"])
         setInputDataSize("1000")
+        setInputDifferentValue("100")
         setDisBtn(false)
         setValue({})
         setIterforbutton("")
@@ -40,7 +42,7 @@ export const MainPage = () => {
                 setDisBtn(false)
             }
             setValue(data.info_about_sort)
-            setImgString(data.img) 
+            setImgString(data.img)
         })
         return (() => {
             socket.disconnect()
@@ -97,7 +99,7 @@ export const MainPage = () => {
 
     const getWS = () => {
         setDisBtn(true)
-        socket.emit("chat", {dataSize: inputDataSize, sorts:checkBoxState})
+        socket.emit("chat", {dataSize: inputDataSize, sorts:checkBoxState, dataDifValue: inputDifferentValue})
     }
 
     const ClickCheckBox = async() => {
@@ -108,11 +110,14 @@ export const MainPage = () => {
         <div style={{display:"flex", justifyContent:"center"}}>  
             <div style={{display:"inline-block", width:"45%", margin:"2%", paddingTop:"1%"}}>
                 <MyDataSelection 
+
                     InputTextFieldLabel="size" 
                     InputTypeLabel="data" 
                     InputSizeLabel="size" 
                     Item={dataType} 
-                    setInputDataType={setInputDataType} 
+                    setInputDifferentValue={setInputDifferentValue}
+                    maxDif={10000}
+                    setInputDataType={setInputDataType}
                     setInputDataSize={setInputDataSize}
                     maxValue = {100000}
                 />

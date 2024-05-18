@@ -4,7 +4,7 @@ import { MyTextField } from "./UI/MyTextFieldNumber"
 export const MyDataSelection = (props) => {
     return(
         <div>
-            <MyAutoComplete InputLabel = {props.InputTypeLabel} item = {props.Item} setInputData = {props.setInputDataType}/>
+            <MyTextField type="number" name="different values" setInputData={props.setInputDifferentValue} maxValue={props.maxDif}/>
             <MyTextField type="number" name={props.InputTextFieldLabel} setInputData={props.setInputDataSize} maxValue={props.maxValue}/>
         </div>
     )

@@ -27,6 +27,9 @@ socketio.init_app(app)
 def index():
     return app.send_static_file('index.html')
 
+def get_random_data_for_sorting(differentValue, dataSize):
+    return [random.randint(0, differentValue) for i in range(dataSize)]
+
 def get_old_graphs(mask, arr , data_size):
     fig = Figure()
     ax = fig.subplots()
@@ -139,6 +142,7 @@ def generate_ws_new_graphs(data):
 def handle_chat(data):
     print(data)
     data_size = int(data["dataSize"])
+    data_dif_value = int(data["dataDifValue"])
     old_graphs = dict()
     for new_sort_name in data["sorts"]:
         dir_path = os.path.dirname(os.path.realpath(__file__))
@@ -163,13 +167,14 @@ def handle_chat(data):
         plt.style.use('seaborn-v0_8-colorblind')
         info_about_new_sort = []
         amount = 0
+        data_for_sorting = get_random_data_for_sorting(differentValue=data_dif_value, dataSize=data_size)
         if (new_sort_name == "quick_sort"):
             for i in old_graphs:
                 ax.semilogy(range(10, data_size, int((data_size - 10) / 200)), old_graphs[i], label=f"{i}")
             
             for i in range(10, data_size, int((data_size - 10) / 200)):
                 amount += 1
-                py_values = [random.randint(1, 1000) for _ in range(i)]
+                py_values = data_for_sorting[:i]
                 summ = 0
                 for k in range(3):
                     arr_1 = (ctypes.c_int * len(py_values))(*py_values)
@@ -194,7 +199,7 @@ def handle_chat(data):
                 ax.semilogy(range(10, data_size, int((data_size - 10) / 200)), old_graphs[i], label=f"{i}")
             for i in range(10, data_size, int((data_size - 10) / 200)):
                 amount += 1
-                py_values = [random.randint(1, 1000) for _ in range(i)]
+                py_values = data_for_sorting[:i]
                 summ = 0
                 for k in range(3):
                     arr_1 = (ctypes.c_int * len(py_values))(*py_values)
@@ -218,7 +223,7 @@ def handle_chat(data):
                 ax.semilogy(range(10, data_size, int((data_size - 10) / 200)), old_graphs[i], label=f"{i}")
             for i in range(10, data_size, int((data_size - 10) / 200)):
                 amount += 1
-                py_values = [random.randint(1, 1000) for _ in range(i)]
+                py_values = data_for_sorting[:i]
                 summ = 0
                 for k in range(3):
                     arr_1 = (ctypes.c_int * len(py_values))(*py_values)
@@ -244,7 +249,7 @@ def handle_chat(data):
                 ax.semilogy(range(10, data_size, int((data_size - 10) / 200)), old_graphs[i], label=f"{i}")
             for i in range(10, data_size, int((data_size - 10) / 200)):
                 amount += 1
-                py_values = [random.randint(1, 1000) for _ in range(i)]
+                py_values = data_for_sorting[:i]
                 summ = 0
                 for k in range(3):
                     arr_1 = (ctypes.c_int * len(py_values))(*py_values)
