@@ -19,7 +19,7 @@ export const MyTextField = (props) => {
         <TextField
               sx={{ minWidth: "100%", maxWidth: "100%", marginBottom: "1%"}}
               label={props.name}
-              placeholder='1000'
+              placeholder='number'
               value={value} 
               onChange={handleChange}
         />

@@ -3,12 +3,14 @@ import { MyButton } from "../components/UI/MyButton.js"
 import { useHttp } from "../hooks/http.hook.js"
 import { MySortsList } from "../components/MySortsList.js";
 import { MyDataSelection } from "../components/MyDataSelection.js";
+import { TextAboutSortingPage } from "./TextAboutSortingPage.js";
 import { io } from "socket.io-client"
 let socket;
 
 export const MainPage = () => {
     const [iterforbutton, setIterforbutton] = useState([], {"iter" : ""})
     const [imgString, setImgString] = useState([],"")
+    const [isOpenInfoPage, setIsOpenInfoPage] = useState([], false)
     const [amount, setAmount] = useState([], 0)
     const {loading, request} = useHttp()
     const [disBtn, setDisBtn] = useState([], false)
@@ -21,6 +23,7 @@ export const MainPage = () => {
     const dataType = ["default data","bad data for quicksort", "bad data for mergesort"]
 
     useEffect(() => {
+        setIsOpenInfoPage(false)
         setAmount(0)
         setSortsState(["quick_sort", "merge_sort", "insertion_sort", "bubble_sort"])
         setCheckBoxState(["quick_sort", "merge_sort", "insertion_sort", "bubble_sort"])
@@ -106,47 +109,71 @@ export const MainPage = () => {
         console.log(checkBoxState)
     }
 
+    const ChangeOpen = () => {
+        setIsOpenInfoPage(!isOpenInfoPage)
+        setImgString("")
+    }
+
     return (
         <div style={{display:"flex", justifyContent:"center"}}>  
+            {(!isOpenInfoPage) ? (
             <div style={{display:"inline-block", width:"45%", margin:"2%", paddingTop:"1%"}}>
-                <MyDataSelection 
+            {/* {(imgString.length === 0) ? (
+                <p></p>
+            ) : (
+                <div style={{display:"inline-block", width:"45%", margin:"2%", marginTop:"0%"}}>
+                    <img alt="" width={"100%"} src={(`data:image/jpg;base64,${imgString}`)} />
+                </div>
+            )} */}
+            <MyDataSelection 
 
-                    InputTextFieldLabel="size" 
-                    InputTypeLabel="data" 
-                    InputSizeLabel="size" 
-                    Item={dataType} 
-                    setInputDifferentValue={setInputDifferentValue}
-                    maxDif={10000}
-                    setInputDataType={setInputDataType}
-                    setInputDataSize={setInputDataSize}
-                    maxValue = {100000}
-                />
+                InputTextFieldLabel="size" 
+                InputTypeLabel="data" 
+                InputSizeLabel="size" 
+                Item={dataType} 
+                setInputDifferentValue={setInputDifferentValue}
+                maxDif={10000}
+                setInputDataType={setInputDataType}
+                setInputDataSize={setInputDataSize}
+                maxValue = {100000}
+            />
 
-                <MyButton
-                    disabled = {disBtn}
-                    onclk = {getWS}
-                    children = "click for Sorting"
-                />
+            <MyButton
+                disabled = {disBtn}
+                onclk = {getWS}
+                children = "click for Sorting"
+            />
 
-                <MySortsList
-                    style={{}}
-                    ClickCheckBox = {ClickCheckBox}
-                    setCheckBoxState = {setCheckBoxState} 
-                    checkBoxState = {checkBoxState}
-                    sortsState = {sortsState}
-                />
 
-            </div>
+            <MyButton
+                disabled = {disBtn}
+                onclk = {ChangeOpen}
+                children = "click for get info about sorting"
+            />
 
-                {(imgString.length === 0) ? (
-                    <p></p>
+            <MySortsList
+                style={{}}
+                ClickCheckBox = {ClickCheckBox}
+                setCheckBoxState = {setCheckBoxState} 
+                checkBoxState = {checkBoxState}
+                sortsState = {sortsState}
+            />
+        </div>
                 ) : (
-                    <div style={{display:"inline-block", width:"45%", margin:"2%", marginTop:"0%"}}>
-                        <img alt="" width={"100%"} src={(`data:image/jpg;base64,${imgString}`)} />
+                    <div>
+                        <TextAboutSortingPage btnFunc = {ChangeOpen}>
+
+                        </TextAboutSortingPage>
                     </div>
                 )}
-
-
+        
+        {(imgString.length === 0) ? (
+                <p></p>
+            ) : (
+                <div style={{display:"inline-block", width:"45%", margin:"2%", marginTop:"0%"}}>
+                    <img alt="" width={"100%"} src={(`data:image/jpg;base64,${imgString}`)} />
+                </div>
+            )}
         </div>
     )
 }
