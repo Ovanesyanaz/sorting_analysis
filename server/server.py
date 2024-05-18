@@ -188,12 +188,12 @@ def handle_chat(data):
                     ax.semilogy(list(range(10, data_size, int((data_size - 10) / 200)))[:len(info_about_new_sort)], info_about_new_sort)
                     buf = BytesIO()
                     fig.savefig(buf, format="png")
-                    emit("chat", {"img":base64.b64encode(buf.getbuffer()).decode("ascii"), "info_about_sort": old_graphs}, broadcast=True)        
+                    emit("chat", {"img":base64.b64encode(buf.getbuffer()).decode("ascii"), "info_about_sort": old_graphs}, broadcast=False)        
             old_graphs["quick_sort"] = info_about_new_sort
             ax.semilogy(list(range(10, data_size, int((data_size - 10) / 200)))[:len(info_about_new_sort)], info_about_new_sort, label=f"{new_sort_name}")
             buf = BytesIO()
             fig.savefig(buf, format="png")
-            emit("chat", {"img":base64.b64encode(buf.getbuffer()).decode("ascii"), "info_about_sort": old_graphs}, broadcast=True)
+            emit("chat", {"img":base64.b64encode(buf.getbuffer()).decode("ascii"), "info_about_sort": old_graphs}, broadcast=False)
         if (new_sort_name == "merge_sort"):
             for i in old_graphs:
                 ax.semilogy(range(10, data_size, int((data_size - 10) / 200)), old_graphs[i], label=f"{i}")
@@ -212,12 +212,12 @@ def handle_chat(data):
                     ax.semilogy(list(range(10, data_size, int((data_size - 10) / 200)))[:len(info_about_new_sort)], info_about_new_sort)
                     buf = BytesIO()
                     fig.savefig(buf, format="png")
-                    emit("chat", {"img":base64.b64encode(buf.getbuffer()).decode("ascii"), "info_about_sort": old_graphs}, broadcast=True)        
+                    emit("chat", {"img":base64.b64encode(buf.getbuffer()).decode("ascii"), "info_about_sort": old_graphs}, broadcast=False)        
             old_graphs["merge_sort"] = info_about_new_sort
             ax.semilogy(list(range(10, data_size, int((data_size - 10) / 200)))[:len(info_about_new_sort)], info_about_new_sort, label=f"{new_sort_name}")
             buf = BytesIO()
             fig.savefig(buf, format="png")
-            emit("chat", {"img":base64.b64encode(buf.getbuffer()).decode("ascii"), "info_about_sort": old_graphs}, broadcast=True)
+            emit("chat", {"img":base64.b64encode(buf.getbuffer()).decode("ascii"), "info_about_sort": old_graphs}, broadcast=False)
         if (new_sort_name == "insertion_sort"):
             for i in old_graphs:
                 ax.semilogy(range(10, data_size, int((data_size - 10) / 200)), old_graphs[i], label=f"{i}")
@@ -236,12 +236,12 @@ def handle_chat(data):
                     ax.semilogy(list(range(10, data_size, int((data_size - 10) / 200)))[:len(info_about_new_sort)], info_about_new_sort)
                     buf = BytesIO()
                     fig.savefig(buf, format="png")
-                    emit("chat", {"img":base64.b64encode(buf.getbuffer()).decode("ascii"), "info_about_sort": old_graphs}, broadcast=True)        
+                    emit("chat", {"img":base64.b64encode(buf.getbuffer()).decode("ascii"), "info_about_sort": old_graphs}, broadcast=False)        
             old_graphs["insertion_sort"] = info_about_new_sort
             ax.semilogy(list(range(10, data_size, int((data_size - 10) / 200)))[:len(info_about_new_sort)], info_about_new_sort, label=f"{new_sort_name}")
             buf = BytesIO()
             fig.savefig(buf, format="png")
-            emit("chat", {"img":base64.b64encode(buf.getbuffer()).decode("ascii"), "info_about_sort": old_graphs}, broadcast=True)
+            emit("chat", {"img":base64.b64encode(buf.getbuffer()).decode("ascii"), "info_about_sort": old_graphs}, broadcast=False)
 
         if (new_sort_name == "bubble_sort"):
             amount = 0
@@ -262,13 +262,13 @@ def handle_chat(data):
                     ax.semilogy(list(range(10, data_size, int((data_size - 10) / 200)))[:len(info_about_new_sort)], info_about_new_sort)
                     buf = BytesIO()
                     fig.savefig(buf, format="png")
-                    emit("chat", {"img":base64.b64encode(buf.getbuffer()).decode("ascii"), "info_about_sort": old_graphs}, broadcast=True)        
+                    emit("chat", {"img":base64.b64encode(buf.getbuffer()).decode("ascii"), "info_about_sort": old_graphs}, broadcast=False)        
             old_graphs["bubble_sort"] = info_about_new_sort
             ax.semilogy(list(range(10, data_size, int((data_size - 10) / 200)))[:len(info_about_new_sort)], info_about_new_sort, label=f"{new_sort_name}")
             ax.legend()
             buf = BytesIO()
             fig.savefig(buf, format="png")
-            emit("chat", {"img":base64.b64encode(buf.getbuffer()).decode("ascii"), "info_about_sort": old_graphs}, broadcast=True)
+            emit("chat", {"img":base64.b64encode(buf.getbuffer()).decode("ascii"), "info_about_sort": old_graphs}, broadcast=False)
     fig.clf()
     fig = Figure()
     ax = fig.subplots()
@@ -281,7 +281,7 @@ def handle_chat(data):
     ax.legend()
     buf = BytesIO()
     fig.savefig(buf, format="png")
-    emit("chat", {"img":base64.b64encode(buf.getbuffer()).decode("ascii"), "info_about_sort": old_graphs, "isEnd": 1}, broadcast=True)
+    emit("chat", {"img":base64.b64encode(buf.getbuffer()).decode("ascii"), "info_about_sort": old_graphs, "isEnd": 1}, broadcast=False)
 
 if __name__ == "__main__":
     socketio.run(app)
