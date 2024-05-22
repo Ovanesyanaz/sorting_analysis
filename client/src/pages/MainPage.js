@@ -11,6 +11,7 @@ export const MainPage = () => {
     const [iterforbutton, setIterforbutton] = useState([], {"iter" : ""})
     const [imgString, setImgString] = useState([],"")
     const [isOpenInfoPage, setIsOpenInfoPage] = useState([], false)
+    const [videoUrl, setVideoUrl] = useState([], "")
     const [amount, setAmount] = useState([], 0)
     const {loading, request} = useHttp()
     const [disBtn, setDisBtn] = useState([], false)
@@ -25,6 +26,7 @@ export const MainPage = () => {
     useEffect(() => {
         setIsOpenInfoPage(false)
         setAmount(0)
+        setVideoUrl("")
         setSortsState(["quick_sort", "merge_sort", "insertion_sort", "bubble_sort"])
         setCheckBoxState(["quick_sort", "merge_sort", "insertion_sort", "bubble_sort"])
         setInputDataSize("1000")
@@ -40,12 +42,16 @@ export const MainPage = () => {
         socket = io();
 
         socket.on("chat", (data) => {
-            console.log(data)
-            if (data.isEnd){
-                setDisBtn(false)
+            if (data.isStart){
+                setVideoUrl("https://www.youtube.com/embed/" + data.data + "?si=UuqpeWtZ8KYrPcQm&t=36&rel=0&modestbranding=1&showinfo=0&controls=0&autoplay=1&mute=0")
             }
-            setValue(data.info_about_sort)
-            setImgString(data.img)
+            else{
+                if (data.isEnd){
+                    setDisBtn(false)
+                }
+                setValue(data.info_about_sort)
+                setImgString(data.img)
+            }
         })
         return (() => {
             socket.disconnect()
@@ -100,7 +106,7 @@ export const MainPage = () => {
         }
     }
 
-    const getWS = () => {
+    const getWS = async() => {
         setDisBtn(true)
         socket.emit("chat", {dataSize: inputDataSize, sorts:checkBoxState, dataDifValue: inputDifferentValue})
     }
@@ -125,6 +131,33 @@ export const MainPage = () => {
                     <img alt="" width={"100%"} src={(`data:image/jpg;base64,${imgString}`)} />
                 </div>
             )} */}
+            {(videoUrl.length != 0) ? (
+                <iframe 
+                    width="100%"
+                    height="100%"
+                    src={videoUrl}
+                    // src="https://www.youtube.com/embed/L_fcrOyoWZ8?si=UuqpeWtZ8KYrPcQm&t=36&rel=0&modestbranding=1&showinfo=0&controls=0&autoplay=1&mute=0"
+                    title="YouTube video player"
+                    frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                    referrerpolicy="strict-origin-when-cross-origin"
+                    allowfullscreen
+                >
+                </iframe>
+            ):(
+                <p>
+                </p>
+            )
+
+            }
+            {/* <iframe 
+                width="100%" 
+                height="100%"
+                src="https://www.youtube.com/embed/II7oNictQDY?rel=0&modestbranding=1&autohide=1&mute=1&showinfo=0&controls=0&autoplay=1&mute=0"
+                frameborder="0" 
+                allowfullscreen
+            >
+            </iframe> */}
             <MyDataSelection 
 
                 InputTextFieldLabel="size" 

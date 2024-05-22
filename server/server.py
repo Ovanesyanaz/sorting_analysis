@@ -138,9 +138,14 @@ def generate_old_graphs(data_size):
 def generate_ws_new_graphs(data):
     print(data)
 
+def getVideoId():
+    return "lRznKN2oPUc"
+
 @socketio.on("chat")
 def handle_chat(data):
     print(data)
+    videoid = getVideoId()
+    emit("chat", {"isStart" : 1, "data": videoid})
     data_size = int(data["dataSize"])
     data_dif_value = int(data["dataDifValue"])
     old_graphs = dict()
@@ -174,9 +179,9 @@ def handle_chat(data):
             
             for i in range(10, data_size, int((data_size - 10) / 200)):
                 amount += 1
-                py_values = data_for_sorting[:i]
                 summ = 0
                 for k in range(3):
+                    py_values = data_for_sorting[:i]
                     arr_1 = (ctypes.c_int * len(py_values))(*py_values)
                     summ += (lib.quick_sort_with_timer(arr_1, len(arr_1)))
                 info_about_new_sort.append(summ / 3)
@@ -199,9 +204,9 @@ def handle_chat(data):
                 ax.semilogy(range(10, data_size, int((data_size - 10) / 200)), old_graphs[i], label=f"{i}")
             for i in range(10, data_size, int((data_size - 10) / 200)):
                 amount += 1
-                py_values = data_for_sorting[:i]
                 summ = 0
                 for k in range(3):
+                    py_values = data_for_sorting[:i]
                     arr_1 = (ctypes.c_int * len(py_values))(*py_values)
                     summ += (lib.merge_sort_with_timer(arr_1, len(arr_1)))
                 info_about_new_sort.append(summ / 3)
@@ -223,9 +228,9 @@ def handle_chat(data):
                 ax.semilogy(range(10, data_size, int((data_size - 10) / 200)), old_graphs[i], label=f"{i}")
             for i in range(10, data_size, int((data_size - 10) / 200)):
                 amount += 1
-                py_values = data_for_sorting[:i]
                 summ = 0
                 for k in range(3):
+                    py_values = data_for_sorting[:i]
                     arr_1 = (ctypes.c_int * len(py_values))(*py_values)
                     summ += lib.insertion_sort_with_timer(arr_1, len(arr_1))
                 info_about_new_sort.append(summ / 3)
@@ -249,9 +254,9 @@ def handle_chat(data):
                 ax.semilogy(range(10, data_size, int((data_size - 10) / 200)), old_graphs[i], label=f"{i}")
             for i in range(10, data_size, int((data_size - 10) / 200)):
                 amount += 1
-                py_values = data_for_sorting[:i]
                 summ = 0
                 for k in range(3):
+                    py_values = data_for_sorting[:i]
                     arr_1 = (ctypes.c_int * len(py_values))(*py_values)
                     summ += lib.bubble_sort_with_timer(arr_1, len(arr_1))
                 info_about_new_sort.append(summ / 3)
