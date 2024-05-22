@@ -139,7 +139,11 @@ def generate_ws_new_graphs(data):
     print(data)
 
 def getVideoId():
-    return "lRznKN2oPUc"
+    with open("url_videos.txt", 'r') as file:
+        a = []
+        for line in file:
+            a.append(line)
+    return a[np.random.randint(0, len(a))][:len(a)-2]
 
 @socketio.on("chat")
 def handle_chat(data):
